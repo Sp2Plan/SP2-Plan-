@@ -1,1535 +1,1170 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#6c5ce7">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
- <title>SP2 — Plan lekcji</title>
+  <title>SP2 7A</title>
 
   <style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-:root {
-    --bg: #f4f5fb;
-    --card: #ffffff;
-    --lesson: #ffffff;
-    --text: #181824;
-    --secondary: #77778b;
-    --border: rgba(0,0,0,.07);
-    --accent: #6c5ce7;
-    --accent2: #8b7cf6;
-    --shadow: 0 12px 35px rgba(30,25,70,.09);
-}
-
-body.dark {
-    --bg: #101018;
-    --card: #1c1c28;
-    --lesson: #232330;
-    --text: #f5f5fa;
-    --secondary: #aaaabd;
-    --border: rgba(255,255,255,.08);
-    --shadow: 0 12px 35px rgba(0,0,0,.3);
-}
-
-body {
-    min-height: 100vh;
-    background:
-        radial-gradient(circle at 10% 0%, rgba(108,92,231,.15), transparent 30%),
-        radial-gradient(circle at 90% 20%, rgba(139,124,246,.12), transparent 30%),
-        var(--bg);
-    color: var(--text);
-    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    transition: background .3s ease, color .3s ease;
-}
-
-button {
-    font-family: inherit;
-    border: none;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.container {
-    width: min(100% - 20px, 1050px);
-    margin: auto;
-    padding: 18px 0 50px;
-}
-
-/* HEADER */
-
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-}
-
-.brand {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-}
-
-.logo {
-    width: 48px;
-    height: 48px;
-    border-radius: 15px;
-    display: grid;
-    place-items: center;
-    color: white;
-    font-weight: 900;
-    font-size: 14px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    box-shadow: 0 8px 22px rgba(108,92,231,.3);
-}
-
-.brand h1 {
-    font-size: 22px;
-    font-weight: 900;
-}
-
-.brand p {
-    color: var(--secondary);
-    font-size: 12px;
-    margin-top: 2px;
-}
-
-.actions {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.language {
-    display: flex;
-    padding: 4px;
-    border-radius: 13px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow);
-}
-
-.language button {
-    padding: 7px 9px;
-    border-radius: 9px;
-    color: var(--secondary);
-    background: transparent;
-    font-size: 12px;
-    font-weight: 800;
-}
-
-.language button.active {
-    background: var(--accent);
-    color: white;
-}
-
-.icon-btn {
-    width: 41px;
-    height: 41px;
-    border-radius: 13px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    color: var(--text);
-    box-shadow: var(--shadow);
-    font-size: 18px;
-    transition: transform .2s ease;
-}
-
-.icon-btn:hover {
-    transform: translateY(-2px);
-}
-
-/* CLASS PANEL */
-
-.class-panel {
-    position: relative;
-    overflow: hidden;
-    padding: 23px;
-    border-radius: 25px;
-    color: white;
-    background: linear-gradient(135deg, var(--accent), #8172f1);
-    box-shadow: 0 16px 35px rgba(108,92,231,.25);
-    margin-bottom: 22px;
-}
-
-.class-panel::after {
-    content: "";
-    position: absolute;
-    width: 190px;
-    height: 190px;
-    border-radius: 50%;
-    background: rgba(255,255,255,.08);
-    right: -55px;
-    top: -80px;
-}
-
-.class-title {
-    position: relative;
-    z-index: 2;
-}
-
-.class-title span {
-    font-size: 12px;
-    opacity: .8;
-}
-
-.class-title h2 {
-    font-size: 30px;
-    font-weight: 900;
-    margin-top: 2px;
-}
-
-.class-tabs {
-    display: flex;
-    gap: 7px;
-    margin-top: 18px;
-    position: relative;
-    z-index: 2;
-    flex-wrap: wrap;
-}
-
-.class-tab {
-    padding: 10px 17px;
-    border-radius: 12px;
-    color: white;
-    background: rgba(255,255,255,.15);
-    border: 1px solid rgba(255,255,255,.15);
-    font-weight: 800;
-    transition: .25s ease;
-}
-
-.class-tab:hover {
-    transform: translateY(-2px);
-}
-
-.class-tab.active {
-    color: var(--accent);
-    background: white;
-    transform: translateY(-2px);
-}
-
-/* WEEK TITLE */
-
-.week-title {
-    margin: 8px 3px 17px;
-}
-
-.week-title h2 {
-    font-size: 24px;
-    font-weight: 900;
-}
-
-.week-title p {
-    color: var(--secondary);
-    font-size: 13px;
-    margin-top: 5px;
-}
-
-/* SCHEDULE */
-
-#schedule {
-    display: grid;
-    gap: 17px;
-}
-
-.day {
-    padding: 17px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 22px;
-    box-shadow: var(--shadow);
-    animation: appear .4s ease both;
-}
-
-.day:nth-child(2) {
-    animation-delay: .05s;
-}
-
-.day:nth-child(3) {
-    animation-delay: .10s;
-}
-
-.day:nth-child(4) {
-    animation-delay: .15s;
-}
-
-.day:nth-child(5) {
-    animation-delay: .20s;
-}
-
-@keyframes appear {
-    from {
-        opacity: 0;
-        transform: translateY(12px);
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f7;
+      color: #111;
+      transition: 0.3s;
     }
-}
 
-.day-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-}
-
-.day-name {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 18px;
-    font-weight: 900;
-}
-
-.day-dot {
-    width: 11px;
-    height: 11px;
-    border-radius: 50%;
-    background: var(--day-color);
-    box-shadow: 0 0 0 5px rgba(108,92,231,.08);
-}
-
-.lesson-count {
-    color: var(--secondary);
-    font-size: 11px;
-    font-weight: 700;
-}
-
-.lessons {
-    display: grid;
-    gap: 8px;
-}
-
-.lesson {
-    min-height: 54px;
-    display: grid;
-    grid-template-columns: 41px 1fr;
-    align-items: center;
-    gap: 8px;
-    padding: 7px 12px 7px 7px;
-    border-radius: 15px;
-    background: var(--lesson);
-    border: 1px solid var(--border);
-    transition: transform .2s ease, box-shadow .2s ease;
-}
-
-.lesson:hover {
-    transform: translateX(3px);
-    box-shadow: 0 5px 18px rgba(0,0,0,.06);
-}
-
-.lesson-number {
-    width: 39px;
-    height: 39px;
-    display: grid;
-    place-items: center;
-    border-radius: 11px;
-    color: var(--accent);
-    background: rgba(108,92,231,.1);
-    font-weight: 900;
-}
-
-.lesson-name {
-    font-size: 14px;
-    font-weight: 700;
-    line-height: 1.25;
-}
-
-/* EMPTY */
-
-.empty {
-    text-align: center;
-    padding: 55px 20px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 23px;
-    box-shadow: var(--shadow);
-    animation: appear .4s ease;
-}
-
-.empty-icon {
-    font-size: 45px;
-    margin-bottom: 15px;
-}
-
-.empty h2 {
-    font-size: 21px;
-    margin-bottom: 8px;
-}
-
-.empty p {
-    color: var(--secondary);
-    font-size: 14px;
-}
-
-/* CONTACT */
-
-.contact {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 23px;
-    padding: 25px;
-    box-shadow: var(--shadow);
-    animation: appear .4s ease;
-}
-
-.contact-icon {
-    font-size: 42px;
-    margin-bottom: 12px;
-}
-
-.contact h2 {
-    font-size: 23px;
-    font-weight: 900;
-    margin-bottom: 9px;
-}
-
-.contact-description {
-    color: var(--secondary);
-    line-height: 1.55;
-    font-size: 14px;
-    margin-bottom: 20px;
-}
-
-.email-box {
-    padding: 15px;
-    border-radius: 15px;
-    background: rgba(108,92,231,.08);
-    border: 1px solid rgba(108,92,231,.15);
-    margin-bottom: 16px;
-}
-
-.email-box strong {
-    display: block;
-    color: var(--accent);
-    font-size: 13px;
-    margin-bottom: 5px;
-}
-
-.email-address {
-    font-size: 15px;
-    font-weight: 800;
-    word-break: break-word;
-}
-
-.form-rule {
-    padding: 15px;
-    border-radius: 15px;
-    background: rgba(108,92,231,.06);
-    margin-bottom: 18px;
-}
-
-.form-rule strong {
-    display: block;
-    margin-bottom: 8px;
-}
-
-.form-rule code {
-    display: inline-block;
-    padding: 9px 11px;
-    border-radius: 9px;
-    background: var(--lesson);
-    color: var(--accent);
-    font-weight: 800;
-    font-size: 13px;
-}
-
-.contact-button {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    width: 100%;
-    padding: 14px 18px;
-    border-radius: 14px;
-    color: white;
-    background: linear-gradient(135deg,var(--accent),var(--accent2));
-    font-size: 14px;
-    font-weight: 850;
-    text-decoration: none;
-    box-shadow: 0 8px 20px rgba(108,92,231,.22);
-    transition: .2s ease;
-}
-
-.contact-button:hover {
-    transform: translateY(-2px);
-}
-
-/* MOBILE */
-
-@media (max-width: 600px) {
+    body.dark {
+      background: #111114;
+      color: #fff;
+    }
 
     .container {
-        width: min(100% - 16px, 550px);
-        padding-top: 12px;
+      width: min(1100px, 94%);
+      margin: auto;
+      padding: 20px 0 50px;
     }
 
     header {
-        align-items: flex-start;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
     }
 
     .logo {
-        width: 44px;
-        height: 44px;
-        border-radius: 13px;
+      font-size: 28px;
+      font-weight: 800;
     }
 
-    .brand h1 {
-        font-size: 19px;
-    }
-
-    .brand p {
-        font-size: 11px;
+    .logo span {
+      color: #7c3aed;
     }
 
     .actions {
-        gap: 4px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
-    .icon-btn {
-        width: 38px;
-        height: 38px;
+    button {
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      border-radius: 12px;
+      padding: 10px 14px;
+      background: #e9e9ed;
+      color: #111;
+      transition: 0.2s;
     }
 
-    .language button {
-        padding: 7px 7px;
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    body.dark button {
+      background: #242428;
+      color: #fff;
     }
 
     .class-panel {
-        padding: 20px;
-        border-radius: 22px;
+      background: white;
+      padding: 12px;
+      border-radius: 18px;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.06);
     }
 
-    .class-title h2 {
-        font-size: 27px;
+    body.dark .class-panel {
+      background: #1b1b1f;
     }
 
-    .class-tab {
-        padding: 9px 14px;
+    .class-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
-    .week-title h2 {
-        font-size: 22px;
+    .class-tab.active {
+      background: #7c3aed;
+      color: white;
+    }
+
+    .week-title {
+      margin: 20px 0;
+    }
+
+    .week-title h1 {
+      font-size: 26px;
+    }
+
+    .schedule {
+      display: grid;
+      gap: 15px;
     }
 
     .day {
-        padding: 13px;
-        border-radius: 19px;
+      background: white;
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.06);
+    }
+
+    body.dark .day {
+      background: #1b1b1f;
+    }
+
+    .day h2 {
+      margin-bottom: 14px;
+      font-size: 20px;
     }
 
     .lesson {
-        grid-template-columns: 38px 1fr;
-        min-height: 51px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      background: #f3f3f5;
+      margin-top: 8px;
     }
 
-    .lesson-number {
-        width: 36px;
-        height: 36px;
-        border-radius: 10px;
+    body.dark .lesson {
+      background: #252529;
     }
 
-    .lesson-name {
-        font-size: 13px;
+    .number {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #7c3aed;
+      color: white;
+      border-radius: 9px;
+      font-weight: bold;
+      flex-shrink: 0;
     }
 
-    .contact {
-        padding: 21px;
+    .empty {
+      text-align: center;
+      padding: 50px 20px;
+      background: white;
+      border-radius: 20px;
     }
-}
-</style>
 
-  </head>
-<div class="container">
+    body.dark .empty {
+      background: #1b1b1f;
+    }
 
-  <header>
-<div class="brand">
-    <div class="logo">SP2</div>
+    @media (max-width: 600px) {
+      .container {
+        width: 92%;
+      }
 
-    <div>
-        <h1>SP2</h1>
-        <p id="schoolSubtitle">Plan lekcji</p>
-    </div>
-</div>
+      header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
 
-<div class="actions">
+      .logo {
+        font-size: 25px;
+      }
 
-    <div class="language">
-        <button id="plBtn" class="active">🇵🇱 PL</button>
+      .class-tabs button {
+        flex: 1;
+      }
+
+      .day {
+        padding: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <header>
+      <div class="logo">
+        <span>SP2</span> 7A
+      </div>
+
+      <div class="actions">
+        <button id="plBtn">🇵🇱 PL</button>
         <button id="uaBtn">🇺🇦 UA</button>
-    </div>
-
-    <button class="icon-btn" id="themeBtn">
-        🌙
-    </button>
-
-</div>
+        <button id="themeBtn">🌙</button>
+      </div>
     </header>
 
-<section class="class-panel">
+    <div class="class-panel">
+      <div class="class-tabs">
+        <button class="class-tab active" data-class="7A">7A</button>
+        <button class="class-tab" data-class="5B">5B</button>
+        <button class="class-tab" data-class="contact">📩 Kontakt</button>
+      </div>
+    </div>
 
- <div class="class-title">
-    <span id="selectedText">Wybrana klasa</span>
-    <h2 id="selectedClass">7A</h2>
-</div>
+    <section class="week-title">
+      <h1 id="pageTitle">Plan lekcji</h1>
+    </section>
 
-<div class="class-tabs">
-
-    <button class="class-tab active" data-class="7A">
-        7A
-    </button>
-
-    <button class="class-tab" data-class="5B">
-        5B
-    </button>
-
-    <button class="class-tab" data-class="contact">
-        📩 <span id="contactTab">Nie ma twojego planu?</span>
-    </button>
-
-</div>
-  </section>
-<section class="week-title">
-
-  <h2 id="weekTitle">
-    Rozkład na tydzień
-</h2>
-
-<p id="weekSubtitle">
-    Lekcje dla klasy 7A
-</p>
-  
-</section>
-
-  <main id="schedule"></main>
+    <main id="schedule" class="schedule"></main>
 
   </div>
 
-<script>
-
-/* =========================
-   TRANSLATIONS
-========================= */
-
-const translations = {
-
-    pl: {
-
-        subtitle: "Plan lekcji",
-
-        selected: "Wybrana klasa",
-
-        week: "Rozkład na tydzień",
-
-        lessonsFor: "Lekcje dla klasy",
-
-        lessons: "lekcji",
-
-        empty: "Rozkład dla 5B nie został jeszcze dodany",
-
-        contactTab: "Nie ma twojego planu?",
-
-        contactTitle: "Nie ma twojego planu?",
-
-        contactDescription:
-            "Jeżeli nie ma tutaj rozkładu twojej klasy, napisz do nas. Dodamy twój plan do strony.",
-
-        emailLabel: "Napisz do nas:",
-
-        formTitle: "Ważne — napisz wiadomość według tego wzoru:",
-
-        formText:
-            "W temacie wiadomości wpisz PLAN + swoją klasę, a w wiadomości podaj swoje imię i wyślij swój plan lekcji.",
-
-        formExample:
-            "PLAN 7A",
-
-        nameInfo:
-            "Pamiętaj, żeby koniecznie napisać swoje imię.",
-
-        send:
-            "✉️ Napisz wiadomość",
-
-        days: [
-            "Poniedziałek",
-            "Wtorek",
-            "Środa",
-            "Czwartek",
-            "Piątek"
-        ],
-
-        subjects: {
-
-            "Английский язык": "Język angielski",
-
-            "Польский язык": "Język polski",
-
-            "Немецкий язык": "Język niemiecki",
-
-            "Математика": "Matematyka",
-
-            "История": "Historia",
-
-            "Физика": "Fizyka",
-
-            "Химия": "Chemia",
-
-            "Биология": "Biologia",
-
-            "География": "Geografia",
-
-            "Информатика": "Informatyka",
-
-            "Музыка": "Muzyka",
-
-            "Физкультура": "Wychowanie fizyczne",
-
-            "Пластика": "Plastyka",
-
-            "E_ZDROWOTNA": "E_ZDROWOTNA",
-
-            "Doradztwo zawodowe": "Doradztwo zawodowe",
-
-            "Zajęcia z wychowawcą (училка)":
-                "Zajęcia z wychowawcą"
-        }
-    },
-
-
-    ua: {
-
-        subtitle: "Розклад уроків",
-
-        selected: "Обраний клас",
-
-        week: "Розклад на тиждень",
-
-        lessonsFor: "Уроки для класу",
-
-        lessons: "уроків",
-
-        empty: "Розклад для 5B поки не додано",
-
-        contactTab: "Немає твого розкладу?",
-
-        contactTitle: "Немає твого розкладу?",
-
-        contactDescription:
-            "Якщо тут немає розкладу твого класу, напиши нам. Ми додамо твій розклад на сайт.",
-
-        emailLabel: "Напиши нам:",
-
-        formTitle: "Важливо — напиши повідомлення за цим форматом:",
-
-        formText:
-            "У темі листа напиши PLAN + свій клас, а в повідомленні обов’язково вкажи своє ім’я та надішли свій розклад.",
-
-        formExample:
-            "PLAN 7A",
-
-        nameInfo:
-            "Не забудь обов’язково написати своє ім’я.",
-
-        send:
-            "✉️ Написати повідомлення",
-
-        days: [
-            "Понеділок",
-            "Вівторок",
-            "Середа",
-            "Четвер",
-            "П’ятниця"
-        ],
-
-        subjects: {
-
-            "Английский язык": "Англійська мова",
-
-            "Польский язык": "Польська мова",
-
-            "Немецкий язык": "Німецька мова",
-
-            "Математика": "Математика",
-
-            "История": "Історія",
-
-            "Физика": "Фізика",
-
-            "Химия": "Хімія",
-
-            "Биология": "Біологія",
-
-            "География": "Географія",
-
-            "Информатика": "Інформатика",
-
-            "Музыка": "Музика",
-
-            "Физкультура": "Фізична культура",
-
-            "Пластика": "Пластика",
-
-            "E_ZDROWOTNA": "E_ZDROWOTNA",
-
-            "Doradztwo zawodowe": "Профорієнтація",
-
-            "Zajęcia z wychowawcą (училка)":
-                "Заняття з класним керівником"
-        }
-    }
-
-};
-
-
-/* =========================
-   SCHEDULE
-========================= */
-
+</body>
+ <script>
 const scheduleData = {
 
-    "7A": [
+  "7A": {
+    "Понедельник": [
+      "Angielski",
+      "Angielski",
+      "Muzyka",
+      "Biologia",
+      "E_ZDROWOTNA",
+      "Język polski",
+      "Doradztwo zawodowe"
+    ],
 
-        [
-            "Английский язык",
-            "Английский язык",
-            "Музыка",
-            "Биология",
-            "E_ZDROWOTNA",
-            "Польский язык",
-            "Doradztwo zawodowe"
-        ],
+    "Wtorek": [
+      "Angielski",
+      "Angielski",
+      "Język polski",
+      "Fizyka",
+      "Chemia",
+      "Plastyka",
+      "Wychowanie fizyczne",
+      "Wychowanie fizyczne"
+    ],
 
-        [
-            "Английский язык",
-            "Английский язык",
-            "Польский язык",
-            "Физика",
-            "Химия",
-            "Пластика",
-            "Физкультура",
-            "Физкультура"
-        ],
+    "Środa": [
+      "Chemia",
+      "Język niemiecki",
+      "Matematyka",
+      "Historia",
+      "Zajęcia z wychowawcą",
+      "Matematyka",
+      "Angielski"
+    ],
 
-        [
-            "Химия",
-            "Немецкий язык",
-            "Математика",
-            "История",
-            "Zajęcia z wychowawcą (училка)",
-            "Математика",
-            "Английский язык"
-        ],
+    "Czwartek": [
+      "Angielski",
+      "Historia",
+      "Język polski",
+      "Język polski",
+      "Matematyka",
+      "Matematyka",
+      "Fizyka"
+    ],
 
-        [
-            "Английский язык",
-            "История",
-            "Польский язык",
-            "Польский язык",
-            "Математика",
-            "Математика",
-            "Физика"
-        ],
-
-        [
-            "Немецкий язык",
-            "Информатика",
-            "Биология",
-            "География",
-            "Польский язык",
-            "Математика",
-            "Физкультура",
-            "Физкультура"
-        ]
-
+    "Piątek": [
+      "Język niemiecki",
+      "Informatyka",
+      "Biologia",
+      "Geografia",
+      "Język polski",
+      "Matematyka",
+      "Wychowanie fizyczne",
+      "Wychowanie fizyczne"
     ]
+  },
+
+  "5B": {}
 
 };
 
-
-/* =========================
-   VARIABLES
-========================= */
-
-let currentLanguage = "pl";
 
 let currentClass = "7A";
 
-const schedule = document.getElementById("schedule");
 
-const themeBtn = document.getElementById("themeBtn");
+function renderSchedule() {
 
+  const schedule =
+    document.getElementById("schedule");
 
-const dayColors = [
-    "#6c5ce7",
-    "#00b894",
-    "#0984e3",
-    "#e17055",
-    "#fdcb6e"
-];
+  schedule.innerHTML = "";
 
 
-/* =========================
-   RENDER
-========================= */
+  /* Контакт */
 
-function render() {
+  if (currentClass === "contact") {
 
-    const t = translations[currentLanguage];
+    schedule.innerHTML = `
+      <div class="empty">
+        <h2>📩 Nie ma twojego planu?</h2>
+        <br>
+        <p>
+          Napisz do nas, a dodamy brakujący plan lekcji.
+        </p>
 
-    document.documentElement.lang =
-        currentLanguage === "pl" ? "pl" : "uk";
+        <br>
 
+        <p>
+          📧 Boleslawiec0@gmail.com
+        </p>
 
-    document.getElementById("schoolSubtitle").textContent =
-        t.subtitle;
+        <br>
 
+        <p>
+          Temat: PLAN 7A
+        </p>
+      </div>
+    `;
 
-    document.getElementById("selectedText").textContent =
-        t.selected;
+    return;
+  }
 
 
-    document.getElementById("weekTitle").textContent =
-        t.week;
+  /* Пустой класс */
 
+  if (
+    !scheduleData[currentClass] ||
+    Object.keys(scheduleData[currentClass]).length === 0
+  ) {
 
-    document.getElementById("contactTab").textContent =
-        t.contactTab;
+    schedule.innerHTML = `
+      <div class="empty">
+        <h2>📚 ${currentClass}</h2>
+        <br>
+        <p>
+          Расписание пока не добавлено.
+        </p>
+      </div>
+    `;
 
+    return;
+  }
 
-    document.getElementById("selectedClass").textContent =
-        currentClass === "contact" ? "📩" : currentClass;
 
+  /* Расписание */
 
-    if (currentClass === "contact") {
+  for (
+    const [day, lessons]
+    of Object.entries(scheduleData[currentClass])
+  ) {
 
-        document.getElementById("weekTitle").textContent =
-            t.contactTitle;
+    const dayElement =
+      document.createElement("div");
 
-        document.getElementById("weekSubtitle").textContent =
-            t.emailLabel;
+    dayElement.className = "day";
 
-        schedule.innerHTML = `
 
-            <section class="contact">
+    let html = `
+      <h2>${day}</h2>
+    `;
 
-                <div class="contact-icon">
-                    📚
-                </div>
 
-                <h2>
-                    ${t.contactTitle}
-                </h2>
+    lessons.forEach((lesson, index) => {
 
-                <p class="contact-description">
-                    ${t.contactDescription}
-                </p>
+      html += `
+        <div class="lesson">
 
+          <div class="number">
+            ${index + 1}
+          </div>
 
-                <div class="email-box">
+          <div>
+            ${lesson}
+          </div>
 
-                    <strong>
-                        ${t.emailLabel}
-                    </strong>
-
-                    <div class="email-address">
-                        Boleslawiec0@gmail.com
-                    </div>
-
-                </div>
-
-
-                <div class="form-rule">
-
-                    <strong>
-                        ${t.formTitle}
-                    </strong>
-
-                    <p class="contact-description">
-                        ${t.formText}
-                    </p>
-
-                    <code>
-                        ${t.formExample}
-                    </code>
-
-                    <p style="margin-top:10px;font-size:13px;color:var(--secondary);">
-                        ${t.nameInfo}
-                    </p>
-
-                </div>
-
-
-                <a
-                    class="contact-button"
-                    href="mailto:Boleslawiec0@gmail.com?subject=PLAN%207A"
-                >
-                    ${t.send}
-                </a>
-
-            </section>
-
-        `;
-
-        updateTabs();
-
-        return;
-    }
-
-
-    document.getElementById("weekSubtitle").textContent =
-        `${t.lessonsFor} ${currentClass}`;
-
-
-    if (currentClass === "5B") {
-
-        schedule.innerHTML = `
-
-            <div class="empty">
-
-                <div class="empty-icon">
-                    📚
-                </div>
-
-                <h2>
-                    ${t.empty}
-                </h2>
-
-                <p>
-                    5B
-                </p>
-
-            </div>
-
-        `;
-
-        updateTabs();
-
-        return;
-    }
-
-
-    schedule.innerHTML = "";
-
-
-    scheduleData["7A"].forEach((lessons, dayIndex) => {
-
-        const day = document.createElement("section");
-
-        day.className = "day";
-
-        day.style.setProperty(
-            "--day-color",
-            dayColors[dayIndex]
-        );
-
-
-        let lessonHTML = "";
-
-
-        lessons.forEach((subject, index) => {
-
-            const translatedSubject =
-                t.subjects[subject] || subject;
-
-
-            lessonHTML += `
-
-                <div class="lesson">
-
-                    <div class="lesson-number">
-                        ${index + 1}
-                    </div>
-
-                    <div class="lesson-name">
-                        ${translatedSubject}
-                    </div>
-
-                </div>
-
-            `;
-
-        });
-
-
-        day.innerHTML = `
-
-            <div class="day-header">
-
-                <div class="day-name">
-
-                    <span class="day-dot"></span>
-
-                    ${t.days[dayIndex]}
-
-                </div>
-
-                <div class="lesson-count">
-
-                    ${lessons.length}
-                    ${t.lessons}
-
-                </div>
-
-            </div>
-
-
-            <div class="lessons">
-
-                ${lessonHTML}
-
-            </div>
-
-        `;
-
-
-        schedule.appendChild(day);
+        </div>
+      `;
 
     });
 
 
-    updateTabs();
+    dayElement.innerHTML = html;
+
+    schedule.appendChild(dayElement);
+
+  }
 
 }
 
 
-/* =========================
-   TABS
-========================= */
+/* Переключение классов */
 
-function updateTabs() {
-
-    document.querySelectorAll(".class-tab").forEach(button => {
-
-        button.classList.toggle(
-            "active",
-            button.dataset.class === currentClass
-        );
-
-    });
-
-}
-
-
-document.querySelectorAll(".class-tab").forEach(button => {
+document
+  .querySelectorAll(".class-tab")
+  .forEach(button => {
 
     button.addEventListener("click", () => {
 
-        currentClass = button.dataset.class;
+      currentClass =
+        button.dataset.class;
 
-        render();
+      document
+        .querySelectorAll(".class-tab")
+        .forEach(btn =>
+          btn.classList.remove("active")
+        );
 
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
+      button.classList.add("active");
+
+      renderSchedule();
 
     });
 
-});
+  });
 
 
-/* =========================
-   LANGUAGE
-========================= */
+renderSchedule();
+</script>
+ <script>
+const translations = {
 
-document.getElementById("plBtn").addEventListener("click", () => {
+  pl: {
+    title: "Plan lekcji",
 
-    currentLanguage = "pl";
+    contactTitle: "Nie ma twojego planu?",
+    contactText: "Napisz do nas, a dodamy brakujący plan lekcji.",
+    contactSubject: "Temat: PLAN 7A",
 
-    document.getElementById("plBtn").classList.add("active");
+    emptySchedule: "Расписание пока не добавлено."
+  },
 
-    document.getElementById("uaBtn").classList.remove("active");
+  ua: {
+    title: "Розклад уроків",
 
-    render();
+    contactTitle: "Немає твого розкладу?",
+    contactText: "Напиши нам, і ми додамо відсутній розклад.",
+    contactSubject: "Тема: PLAN 7A",
 
-});
+    emptySchedule: "Розклад поки не додано."
+  }
 
+};
 
-document.getElementById("uaBtn").addEventListener("click", () => {
-
-    currentLanguage = "ua";
-
-    document.getElementById("uaBtn").classList.add("active");
-
-    document.getElementById("plBtn").classList.remove("active");
-
-    render();
-
-});
-
-
-/* =========================
-   DARK MODE
-========================= */
-
-themeBtn.addEventListener("click", () => {
-
-    document.body.classList.toggle("dark");
-
-    const dark =
-        document.body.classList.contains("dark");
+let currentLanguage = "pl";
 
 
-    themeBtn.textContent =
-        dark ? "☀️" : "🌙";
+const ukrainianSubjects = {
+  "Angielski": "Англійська",
+  "Muzyka": "Музика",
+  "Biologia": "Біологія",
+  "E_ZDROWOTNA": "E_ZDROWOTNA",
+  "Język polski": "Польська мова",
+  "Doradztwo zawodowe": "Профорієнтація",
+
+  "Fizyka": "Фізика",
+  "Chemia": "Хімія",
+  "Plastyka": "Образотворче мистецтво",
+  "Wychowanie fizyczne": "Фізкультура",
+
+  "Język niemiecki": "Німецька мова",
+  "Matematyka": "Математика",
+  "Historia": "Історія",
+  "Zajęcia z wychowawcą": "Година класного керівника",
+  "Informatyka": "Інформатика",
+  "Geografia": "Географія"
+};
 
 
-    localStorage.setItem(
-        "sp2-theme",
-        dark ? "dark" : "light"
-    );
+const ukrainianDays = {
+  "Poniedziałek": "Понеділок",
+  "Wtorek": "Вівторок",
+  "Środa": "Середа",
+  "Czwartek": "Четвер",
+  "Piątek": "П’ятниця"
+};
 
-});
+
+function translateSubject(subject) {
+
+  if (currentLanguage === "ua") {
+    return ukrainianSubjects[subject] || subject;
+  }
+
+  return subject;
+}
 
 
-/* =========================
-   LOAD SAVED THEME
-========================= */
+function translateDay(day) {
 
-if (localStorage.getItem("sp2-theme") === "dark") {
+  if (currentLanguage === "ua") {
+    return ukrainianDays[day] || day;
+  }
 
-    document.body.classList.add("dark");
+  return day;
+}
 
-    themeBtn.textContent = "☀️";
+
+/*
+Перерисовываем расписание
+*/
+
+const oldRenderSchedule = renderSchedule;
+
+renderSchedule = function() {
+
+  const schedule =
+    document.getElementById("schedule");
+
+  schedule.innerHTML = "";
+
+
+  if (currentClass === "contact") {
+
+    schedule.innerHTML = `
+      <div class="empty">
+
+        <h2>
+          📩 ${translations[currentLanguage].contactTitle}
+        </h2>
+
+        <br>
+
+        <p>
+          ${translations[currentLanguage].contactText}
+        </p>
+
+        <br>
+
+        <p>
+          📧 Boleslawiec0@gmail.com
+        </p>
+
+        <br>
+
+        <p>
+          ${translations[currentLanguage].contactSubject}
+        </p>
+
+      </div>
+    `;
+
+    return;
+  }
+
+
+  if (
+    !scheduleData[currentClass] ||
+    Object.keys(scheduleData[currentClass]).length === 0
+  ) {
+
+    schedule.innerHTML = `
+      <div class="empty">
+
+        <h2>📚 ${currentClass}</h2>
+
+        <br>
+
+        <p>
+          ${translations[currentLanguage].emptySchedule}
+        </p>
+
+      </div>
+    `;
+
+    return;
+  }
+
+
+  for (
+    const [day, lessons]
+    of Object.entries(scheduleData[currentClass])
+  ) {
+
+    const dayElement =
+      document.createElement("div");
+
+    dayElement.className = "day";
+
+
+    let html = `
+      <h2>${translateDay(day)}</h2>
+    `;
+
+
+    lessons.forEach((lesson, index) => {
+
+      html += `
+        <div class="lesson">
+
+          <div class="number">
+            ${index + 1}
+          </div>
+
+          <div>
+            ${translateSubject(lesson)}
+          </div>
+
+        </div>
+      `;
+
+    });
+
+
+    dayElement.innerHTML = html;
+
+    schedule.appendChild(dayElement);
+
+  }
+
+};
+
+
+function updateLanguage() {
+
+  document.getElementById("pageTitle").textContent =
+    translations[currentLanguage].title;
+
+  renderSchedule();
 
 }
 
 
-/* =========================
-   START
-========================= */
+document.getElementById("plBtn").onclick = function() {
 
-render();
+  currentLanguage = "pl";
 
+  updateLanguage();
+
+};
+
+
+document.getElementById("uaBtn").onclick = function() {
+
+  currentLanguage = "ua";
+
+  updateLanguage();
+
+};
 </script>
+ <script>
+const themeButton =
+  document.getElementById("themeBtn");
 
-<!-- ================= SP2 ACCOUNTS ================= -->
+
+function updateThemeIcon() {
+
+  if (document.body.classList.contains("dark")) {
+
+    themeButton.textContent = "☀️";
+
+  } else {
+
+    themeButton.textContent = "🌙";
+
+  }
+
+}
+
+
+const savedTheme =
+  localStorage.getItem("sp2-theme");
+
+
+if (savedTheme === "dark") {
+
+  document.body.classList.add("dark");
+
+}
+
+
+updateThemeIcon();
+
+
+themeButton.addEventListener("click", () => {
+
+  document.body.classList.toggle("dark");
+
+
+  if (
+    document.body.classList.contains("dark")
+  ) {
+
+    localStorage.setItem(
+      "sp2-theme",
+      "dark"
+    );
+
+  } else {
+
+    localStorage.setItem(
+      "sp2-theme",
+      "light"
+    );
+
+  }
+
+
+  updateThemeIcon();
+
+});
+</script>
+ <!-- ===== SP2 LOGIN ===== -->
 
 <style>
-  #sp2-account {
-    margin-top: 20px;
-  }
+#sp2Login {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
 
-  .sp2-account-box {
-    max-width: 420px;
-    margin: 20px auto;
-    padding: 25px;
-    border-radius: 20px;
-    background: var(--card-bg, #fff);
-    box-sizing: border-box;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  .sp2-account-input {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 13px;
-    margin: 7px 0;
-    border-radius: 12px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-  }
+  padding: 20px;
 
-  .sp2-account-button {
-    width: 100%;
-    padding: 13px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 12px;
-    background: #7c3aed;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-  }
+  background: rgba(0,0,0,.65);
+  backdrop-filter: blur(12px);
+}
 
-  .sp2-account-error {
-    color: #e53935;
-    margin-top: 12px;
-    display: none;
-  }
+#sp2Login.hidden {
+  display: none;
+}
 
-  .sp2-account-success {
-    padding: 15px;
-    border-radius: 12px;
-    background: rgba(50, 180, 80, .12);
-    margin-top: 15px;
-  }
+.login-box {
+  width: 100%;
+  max-width: 380px;
 
-  .sp2-logout {
-    background: #555;
-  }
+  padding: 28px;
+
+  background: white;
+  color: #111;
+
+  border-radius: 24px;
+
+  box-shadow:
+    0 20px 70px rgba(0,0,0,.35);
+}
+
+body.dark .login-box {
+  background: #1b1b1f;
+  color: white;
+}
+
+.login-logo {
+  width: 55px;
+  height: 55px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 18px;
+
+  border-radius: 16px;
+
+  color: white;
+  font-weight: 900;
+
+  background: linear-gradient(
+    135deg,
+    #7c3aed,
+    #9333ea
+  );
+}
+
+.login-box h2 {
+  margin-bottom: 8px;
+}
+
+.login-description {
+  color: #777;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+body.dark .login-description {
+  color: #aaa;
+}
+
+.login-input {
+  width: 100%;
+
+  padding: 14px;
+
+  margin-bottom: 10px;
+
+  border: 1px solid #ddd;
+  border-radius: 12px;
+
+  outline: none;
+
+  font-size: 15px;
+}
+
+body.dark .login-input {
+  background: #29292e;
+  color: white;
+  border-color: #444;
+}
+
+.login-button {
+  width: 100%;
+
+  padding: 14px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #7c3aed;
+  color: white;
+
+  font-weight: 700;
+  font-size: 15px;
+
+  cursor: pointer;
+}
+
+.login-error {
+  display: none;
+
+  margin-top: 12px;
+  padding: 10px;
+
+  border-radius: 10px;
+
+  background: #ffe5e5;
+  color: #d00;
+
+  font-size: 13px;
+}
 </style>
+
+
+<div id="sp2Login">
+
+  <div class="login-box">
+
+    <div class="login-logo">
+      SP2
+    </div>
+
+    <h2>👋 Witaj!</h2>
+
+    <p class="login-description">
+      Zaloguj się, aby zobaczyć plan lekcji swojego klasy.
+    </p>
+
+    <input
+      id="loginNickname"
+      class="login-input"
+      type="text"
+      placeholder="Nick"
+      autocomplete="off"
+    >
+
+    <input
+      id="loginPassword"
+      class="login-input"
+      type="password"
+      placeholder="Hasło"
+    >
+
+    <button
+      class="login-button"
+      id="loginButton">
+
+      Zaloguj się
+
+    </button>
+
+    <div
+      id="loginError"
+      class="login-error">
+
+      ❌ Nieprawidłowy nick lub hasło.
+
+    </div>
+
+  </div>
+
+</div>
 
 
 <script>
 
-  /* =================================================
-     1. АККАУНТЫ УЧЕНИКОВ
+/*
+==================================================
+АККАУНТЫ УЧЕНИКОВ
+==================================================
 
-     ДОБАВЛЯЙ НОВЫЕ АККАУНТЫ СЮДА
-     ================================================= */
+Чтобы добавить ученика, добавь ещё один объект.
 
-  const accounts = [
-
-    {
-      nickname: "Alex_7A",
-      password: "12345",
-      class: "7A"
-    },
-
-    {
-      nickname: "Max_5B",
-      password: "67890",
-      class: "5B"
-    }
-
-  ];
+ВАЖНО:
+Это тестовая система.
+Пароли находятся в коде сайта.
+Не используй настоящие пароли.
+*/
 
 
-  /* =================================================
-     2. СОХРАНЯЕМ ТЕКУЩЕГО ПОЛЬЗОВАТЕЛЯ
-     ================================================= */
+const students = [
 
-  let currentStudent = null;
+  {
+    nickname: "Alex_7A",
+    password: "12345",
+    class: "7A"
+  },
+
+  {
+    nickname: "Max_5B",
+    password: "67890",
+    class: "5B"
+  }
+
+];
 
 
-  /* =================================================
-     3. СОЗДАЁМ КНОПКУ ВХОДА
-     ================================================= */
+/*
+==================================================
+ТЕКУЩИЙ УЧЕНИК
+==================================================
+*/
 
-  function sp2CreateLogin() {
+let currentStudent = null;
 
-    const container = document.createElement("div");
 
-    container.id = "sp2-account";
+/*
+==================================================
+ВХОД
+==================================================
+*/
 
-    container.innerHTML = `
+function login() {
 
-      <div class="sp2-account-box">
+  const nickname =
+    document
+      .getElementById("loginNickname")
+      .value
+      .trim();
 
-        <h2>👤 Вход</h2>
+  const password =
+    document
+      .getElementById("loginPassword")
+      .value;
 
-        <p>
-          Войдите в свой аккаунт, чтобы открыть
-          расписание своего класса.
-        </p>
 
-        <input
-          id="sp2-login-nickname"
-          class="sp2-account-input"
-          type="text"
-          placeholder="Никнейм"
-          autocomplete="off"
-        >
+  const student =
+    students.find(user =>
 
-        <input
-          id="sp2-login-password"
-          class="sp2-account-input"
-          type="password"
-          placeholder="Пароль"
-        >
+      user.nickname === nickname &&
+      user.password === password
 
-        <button
-          class="sp2-account-button"
-          onclick="sp2Login()">
+    );
 
-          Войти
 
-        </button>
+  if (!student) {
 
-        <div
-          id="sp2-login-error"
-          class="sp2-account-error">
+    document
+      .getElementById("loginError")
+      .style.display = "block";
 
-          ❌ Неверный никнейм или пароль.
-
-        </div>
-
-      </div>
-
-    `;
-
-    document.body.appendChild(container);
-
+    return;
   }
 
 
-  /* =================================================
-     4. ВХОД
-     ================================================= */
+  /*
+  Успешный вход
+  */
 
-  function sp2Login() {
-
-    const nickname =
-      document
-        .getElementById("sp2-login-nickname")
-        .value
-        .trim();
-
-    const password =
-      document
-        .getElementById("sp2-login-password")
-        .value;
-
-    const error =
-      document.getElementById("sp2-login-error");
+  currentStudent = student;
 
 
-    const account = accounts.find(function(user) {
+  /*
+  Устанавливаем класс ученика
+  */
 
-      return (
-        user.nickname === nickname &&
-        user.password === password
-      );
+  currentClass = student.class;
+
+
+  /*
+  Скрываем окно
+  */
+
+  document
+    .getElementById("sp2Login")
+    .classList.add("hidden");
+
+
+  /*
+  Обновляем вкладки
+  */
+
+  updateStudentTabs();
+
+
+  /*
+  Показываем расписание
+  */
+
+  renderSchedule();
+
+}
+
+
+/*
+==================================================
+ENTER = ВХОД
+==================================================
+*/
+
+document
+  .getElementById("loginPassword")
+  .addEventListener(
+    "keydown",
+    function(event) {
+
+      if (event.key === "Enter") {
+
+        login();
+
+      }
+
+    }
+  );
+
+
+document
+  .getElementById("loginNickname")
+  .addEventListener(
+    "keydown",
+    function(event) {
+
+      if (event.key === "Enter") {
+
+        login();
+
+      }
+
+    }
+  );
+
+
+document
+  .getElementById("loginButton")
+  .addEventListener(
+    "click",
+    login
+  );
+
+
+/*
+==================================================
+СКРЫВАЕМ ЧУЖОЙ КЛАСС
+==================================================
+*/
+
+function updateStudentTabs() {
+
+  document
+    .querySelectorAll(".class-tab")
+    .forEach(button => {
+
+      const className =
+        button.dataset.class;
+
+
+      /*
+      Kontakt оставляем
+      */
+
+      if (className === "contact") {
+
+        button.style.display = "";
+
+        return;
+
+      }
+
+
+      /*
+      Показываем только свой класс
+      */
+
+      if (
+        currentStudent &&
+        className === currentStudent.class
+      ) {
+
+        button.style.display = "";
+
+      } else {
+
+        button.style.display = "none";
+
+      }
 
     });
 
-
-    if (!account) {
-
-      error.style.display = "block";
-
-      return;
-
-    }
+}
 
 
-    error.style.display = "none";
+/*
+==================================================
+ЗАЩИТА ОТ ПЕРЕКЛЮЧЕНИЯ
+==================================================
+*/
 
-    currentStudent = account;
+document
+  .querySelectorAll(".class-tab")
+  .forEach(button => {
 
-    showStudentAccount();
+    button.addEventListener(
+      "click",
+      function(event) {
 
-  }
+        if (!currentStudent) {
 
+          event.preventDefault();
 
-  /* =================================================
-     5. ПОКАЗЫВАЕМ АККАУНТ
-     ================================================= */
+          return;
 
-  function showStudentAccount() {
-
-    const container =
-      document.getElementById("sp2-account");
-
-
-    if (!currentStudent) return;
-
-
-    let scheduleMessage = "";
+        }
 
 
-    if (currentStudent.class === "7A") {
-
-      scheduleMessage = `
-        <div class="sp2-account-success">
-          📚 Расписание класса <b>7A</b> доступно.
-          <br><br>
-          Используй своё обычное расписание
-          7A на сайте.
-        </div>
-      `;
-
-    }
+        const selectedClass =
+          button.dataset.class;
 
 
-    else if (currentStudent.class === "5B") {
+        if (
+          selectedClass !== "contact" &&
+          selectedClass !== currentStudent.class
+        ) {
 
-      scheduleMessage = `
-        <div class="sp2-account-success">
-          📚 Класс <b>5B</b>
-          <br><br>
-          Расписание пока не добавлено.
-        </div>
-      `;
+          event.preventDefault();
 
-    }
+          return;
+
+        }
+
+      }
+    );
+
+  });
 
 
-    else {
+/*
+==================================================
+ПРИ ЗАПУСКЕ САЙТА
+==================================================
+*/
 
-      scheduleMessage = `
-        <div class="sp2-account-success">
-          📚 Расписание для класса
-          <b>${currentStudent.class}</b>
-          пока не добавлено.
-        </div>
-      `;
+document
+  .querySelectorAll(".class-tab")
+  .forEach(button => {
+
+    if (button.dataset.class !== "contact") {
+
+      button.style.display = "none";
 
     }
-
-
-    container.innerHTML = `
-
-      <div class="sp2-account-box">
-
-        <h2>
-          👋 Привет, ${currentStudent.nickname}!
-        </h2>
-
-        <p>
-          🏫 Твой класс:
-          <b>${currentStudent.class}</b>
-        </p>
-
-        ${scheduleMessage}
-
-        <button
-          class="sp2-account-button sp2-logout"
-          onclick="sp2Logout()">
-
-          🚪 Выйти
-
-        </button>
-
-      </div>
-
-    `;
-
-  }
-
-
-  /* =================================================
-     6. ВЫХОД
-     ================================================= */
-
-  function sp2Logout() {
-
-    currentStudent = null;
-
-    const container =
-      document.getElementById("sp2-account");
-
-    container.remove();
-
-    sp2CreateLogin();
-
-  }
-
-
-  /* =================================================
-     7. ЗАПУСК
-     ================================================= */
-
-  document.addEventListener("DOMContentLoaded", function() {
-
-    sp2CreateLogin();
 
   });
 
 </script>
-
-<!-- ================= END SP2 ACCOUNTS ================= -->
-  
-</body>
-  
+ 
 </html>
-
-  
