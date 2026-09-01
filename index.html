@@ -1210,6 +1210,166 @@ if (localStorage.getItem("sp2-theme") === "dark") {
 render();
 
 </script>
+
+ <!-- SP2: скрытая кнопка + админ-панель -->
+<style>
+  #sp2-admin-secret {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 80px;
+    height: 25px;
+    transform: translateX(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 9999;
+  }
+
+  #sp2-admin-panel {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: flex-end;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s;
+    z-index: 10000;
+  }
+
+  #sp2-admin-panel.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .sp2-admin-slide {
+    width: min(420px, 90%);
+    height: 100%;
+    background: var(--card-bg, #ffffff);
+    padding: 25px;
+    box-sizing: border-box;
+    transform: translateX(100%);
+    transition: 0.35s;
+    overflow-y: auto;
+  }
+
+  #sp2-admin-panel.active .sp2-admin-slide {
+    transform: translateX(0);
+  }
+
+  .sp2-admin-title {
+    font-size: 25px;
+    font-weight: 800;
+    margin-bottom: 20px;
+  }
+
+  .sp2-admin-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 13px;
+    margin: 7px 0;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+  }
+
+  .sp2-admin-disabled {
+    width: 100%;
+    padding: 13px;
+    margin-top: 10px;
+    border: 0;
+    border-radius: 12px;
+    background: #999;
+    color: white;
+    cursor: not-allowed;
+  }
+
+  .sp2-admin-close {
+    float: right;
+    border: none;
+    background: transparent;
+    font-size: 25px;
+    cursor: pointer;
+  }
+
+  .sp2-admin-info {
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(127, 127, 127, 0.12);
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+</style>
+
+<!-- Невидимая кнопка -->
+<button id="sp2-admin-secret" aria-label="Admin"></button>
+
+<!-- Админ-панель -->
+<div id="sp2-admin-panel">
+  <div class="sp2-admin-slide">
+
+    <button class="sp2-admin-close" onclick="sp2CloseAdmin()">×</button>
+
+    <div class="sp2-admin-title">
+      👑 Админ-панель
+    </div>
+
+    <div class="sp2-admin-info">
+      Панель пока находится в разработке.<br>
+      Создание аккаунтов будет добавлено позже.
+    </div>
+
+    <h3>Создать аккаунт ученика</h3>
+
+    <input
+      class="sp2-admin-input"
+      type="text"
+      placeholder="Никнейм"
+      disabled
+    >
+
+    <input
+      class="sp2-admin-input"
+      type="text"
+      placeholder="Класс"
+      disabled
+    >
+
+    <input
+      class="sp2-admin-input"
+      type="password"
+      placeholder="Пароль"
+      disabled
+    >
+
+    <button class="sp2-admin-disabled" disabled>
+      Создать аккаунт
+    </button>
+
+  </div>
+</div>
+
+<script>
+  const sp2AdminButton = document.getElementById("sp2-admin-secret");
+  const sp2AdminPanel = document.getElementById("sp2-admin-panel");
+
+  sp2AdminButton.addEventListener("click", () => {
+    sp2AdminPanel.classList.add("active");
+  });
+
+  function sp2CloseAdmin() {
+    sp2AdminPanel.classList.remove("active");
+  }
+
+  // Закрытие при нажатии на затемнённую область
+  sp2AdminPanel.addEventListener("click", (event) => {
+    if (event.target === sp2AdminPanel) {
+      sp2CloseAdmin();
+    }
+  });
+</script>
   
 </body>
   
