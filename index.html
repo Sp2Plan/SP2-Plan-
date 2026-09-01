@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#6c5ce7">
+  <title>SP2 7A — Rozkład lekcji</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #f4f5fb;
+      --card: rgba(255, 255, 255, 0.9);
+      --text: #171725;
+      --secondary: #73738a;
+      --border: rgba(0, 0, 0, 0.07);
+      --accent: #6c5ce7;
+      --accent2: #8b7cf6;
+      --lesson: #ffffff;
+      --shadow: 0 10px 30px rgba(34, 31, 66, 0.08);
+    }
+
+    body.dark {
+      --bg: #101018;
+      --card: rgba(28, 28, 40, 0.94);
+      --text: #f5f5fa;
+      --secondary: #a5a5b8;
+      --border: rgba(255, 255, 255, 0.08);
+      --lesson: #20202d;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(108, 92, 231, 0.15), transparent 30%),
+        radial-gradient(circle at 90% 20%, rgba(139, 124, 246, 0.12), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      transition: background .3s ease, color .3s ease;
+    }
+
+    .container {
+      width: min(100% - 28px, 1050px);
+      margin: auto;
+      padding: 22px 0 50px;
+    }
+
+    /* HEADER */
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      width: 50px;
+      height: 50px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 19px;
+      font-weight: 900;
+      box-shadow: 0 8px 20px rgba(108, 92, 231, .28);
+    }
+
+    .brand h1 {
+      font-size: 23px;
+      font-weight: 850;
+      letter-spacing: -.5px;
+    }
+
+    .brand p {
+      color: var(--secondary);
+      font-size: 13px;
+      margin-top: 2px;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    button {
+      border: 0;
+      font-family: inherit;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .icon-btn {
+      width: 43px;
+      height: 43px;
+      border-radius: 14px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 18px;
+      box-shadow: var(--shadow);
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .icon-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .language {
+      display: flex;
+      padding: 4px;
+      border-radius: 14px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .language button {
+      padding: 8px 11px;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--secondary);
+      font-weight: 750;
+      font-size: 12px;
+    }
+
+    .language button.active {
+      color: white;
+      background: var(--accent);
+    }
+
+    /* CLASS SELECTOR */
+
+    .class-panel {
+      background: linear-gradient(135deg, var(--accent), #8274f1);
+      border-radius: 26px;
+      padding: 24px;
+      color: white;
+      box-shadow: 0 16px 35px rgba(108, 92, 231, .25);
+      margin-bottom: 25px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .class-panel::after {
+      content: "";
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.08);
+      right: -50px;
+      top: -70px;
+    }
+
+    .class-title {
+      position: relative;
+      z-index: 2;
+    }
+
+    .class-title span {
+      opacity: .8;
+      font-size: 13px;
+    }
+
+    .class-title h2 {
+      font-size: 30px;
+      margin-top: 2px;
+      font-weight: 900;
+    }
+
+    .class-tabs {
+      display: flex;
+      gap: 8px;
+      margin-top: 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .class-tab {
+      min-width: 75px;
+      padding: 10px 17px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.16);
+      color: white;
+      font-weight: 800;
+      transition: .25s ease;
+      border: 1px solid rgba(255,255,255,.15);
+    }
+
+    .class-tab.active {
+      background: white;
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* TITLE */
+
+    .week-title {
+      margin: 8px 2px 18px;
+    }
+
+    .week-title h2 {
+      font-size: 25px;
+      font-weight: 850;
+    }
+
+    .week-title p {
+      color: var(--secondary);
+      margin-top: 5px;
+      font-size: 14px;
+    }
+
+    /* SCHEDULE */
+
+    #schedule {
+      display: grid;
+      gap: 18px;
+    }
+
+    .day {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 23px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      animation: slideUp .45s ease both;
+    }
+
+    .day:nth-child(2) { animation-delay: .04s; }
+    .day:nth-child(3) { animation-delay: .08s; }
+    .day:nth-child(4) { animation-delay: .12s; }
+    .day:nth-child(5) { animation-delay: .16s; }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .day-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 13px;
+    }
+
+    .day-name {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 850;
+    }
+
+    .day-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--day-color, var(--accent));
+      box-shadow: 0 0 0 5px color-mix(in srgb, var(--day-color, var(--accent)) 13%, transparent);
+    }
+
+    .lesson-count {
+      color: var(--secondary);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .lessons {
+      display: grid;
+      gap: 8px;
+    }
+
+    .lesson {
+      min-height: 54px;
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      align-items: center;
+      gap: 8px;
+      background: var(--lesson);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 7px 12px 7px 7px;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .lesson:hover {
+      transform: translateX(3px);
+      box-shadow: 0 5px 18px rgba(0,0,0,.06);
+    }
+
+    .lesson-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: rgba(108, 92, 231, .1);
+      color: var(--accent);
+      display: grid;
+      place-items: center;
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .lesson-name {
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    /* EMPTY */
+
+    .empty {
+      text-align: center;
+      padding: 55px 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 25px;
+      box-shadow: var(--shadow);
+      animation: slideUp .4s ease;
+    }
+
+    .empty-icon {
+      font-size: 45px;
+      margin-bottom: 15px;
+    }
+
+    .empty h2 {
+      font-size: 21px;
+      margin-bottom: 8px;
+    }
+
+    .empty p {
+      color: var(--secondary);
+      font-size: 14px;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 600px) {
+      .container {
+        width: min(100% - 18px, 550px);
+        padding-top: 13px;
+      }
+
+      header {
+        align-items: flex-start;
+      }
+
+      .logo {
+        width: 45px;
+        height: 45px;
+        border-radius: 14px;
+      }
+
+      .brand h1 {
+        font-size: 20px;
+      }
+
+      .brand p {
+        font-size: 11px;
+      }
+
+      .actions {
+        gap: 5px;
+      }
+
+      .icon-btn {
+        width: 39px;
+        height: 39px;
+      }
+
+      .language button {
+        padding: 7px 8px;
+      }
+
+      .class-panel {
+        padding: 20px;
+        border-radius: 22px;
+      }
+
+      .class-title h2 {
+        font-size: 27px;
+      }
+
+      .week-title h2 {
+        font-size: 22px;
+      }
+
+      .day {
+        padding: 13px;
+        border-radius: 19px;
+      }
+
+      .lesson {
+        grid-template-columns: 38px 1fr;
+        min-height: 51px;
+      }
+
+      .lesson-number {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+      }
+
+      .lesson-name {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <header>
+      <div class="brand">
+        <div class="logo">SP2</div>
+        <div>
+          <h1>SP2 7A</h1>
+          <p id="schoolSubtitle">Plan lekcji</p>
+        </div>
+      </div>
+
+      <div class="actions">
+
+        <div class="language">
+          <button id="plBtn" class="active">🇵🇱 PL</button>
+          <button id="uaBtn">🇺🇦 UA</button>
+        </div>
+
+        <button class="icon-btn" id="themeBtn" aria-label="Zmień motyw">
+          🌙
+        </button>
+
+      </div>
+    </header>
+
+    <section class="class-panel">
+
+      <div class="class-title">
+        <span id="selectedText">Wybrana klasa</span>
+        <h2 id="selectedClass">7A</h2>
+      </div>
+
+      <div class="class-tabs">
+        <button class="class-tab active" data-class="7A">7A</button>
+        <button class="class-tab" data-class="5B">5B</button>
+      </div>
+
+    </section>
+
+    <section class="week-title">
+      <h2 id="weekTitle">Rozkład na tydzień</h2>
+      <p id="weekSubtitle">Lekcje dla klasy 7A</p>
+    </section>
+
+    <main id="schedule"></main>
+
+  </div>
+
+<script>
+
+const translations = {
+
+  pl: {
+    subtitle: "Plan lekcji",
+    selected: "Wybrana klasa",
+    week: "Rozkład na tydzień",
+    lessonsFor: "Lekcje dla klasy",
+    empty: "Rozkład dla 5B nie został jeszcze dodany",
+    lessons: "lekcji",
+
+    days: [
+      "Poniedziałek",
+      "Wtorek",
+      "Środa",
+      "Czwartek",
+      "Piątek"
+    ],
+
+    subjects: {
+      "Angielski język": "Język angielski",
+      "Polski język": "Język polski",
+      "Niemiecki język": "Język niemiecki",
+      "Matematyka": "Matematyka",
+      "Historia": "Historia",
+      "Fizyka": "Fizyka",
+      "Chemia": "Chemia",
+      "Biologia": "Biologia",
+      "Geografia": "Geografia",
+      "Informatyka": "Informatyka",
+      "Muzyka": "Muzyka",
+      "Fizyczna kultura": "Wychowanie fizyczne",
+      "Plastyka": "Plastyka",
+      "E_ZDROWOTNA": "E_ZDROWOTNA",
+      "Doradztwo zawodowe": "Doradztwo zawodowe",
+      "Zajęcia z wychowawcą (училка)": "Zajęcia z wychowawcą"
+    }
+  },
+
+  ua: {
+    subtitle: "Розклад уроків",
+    selected: "Обраний клас",
+    week: "Розклад на тиждень",
+    lessonsFor: "Уроки для класу",
+    empty: "Розклад для 5B поки не додано",
+    lessons: "уроків",
+
+    days: [
+      "Понеділок",
+      "Вівторок",
+      "Середа",
+      "Четвер",
+      "П’ятниця"
+    ],
+
+    subjects: {
+      "Английский язык": "Англійська мова",
+      "Польский язык": "Польська мова",
+      "Немецкий язык": "Німецька мова",
+      "Математика": "Математика",
+      "История": "Історія",
+      "Физика": "Фізика",
+      "Химия": "Хімія",
+      "Биология": "Біологія",
+      "География": "Географія",
+      "Информатика": "Інформатика",
+      "Музыка": "Музика",
+      "Физкультура": "Фізична культура",
+      "Пластика": "Пластика",
+      "E_ZDROWOTNA": "E_ZDROWOTNA",
+      "Doradztwo zawodowe": "Профорієнтація",
+      "Zajęcia z wychowawcą (училка)": "Заняття з класним керівником"
+    }
+  }
+
+};
+
+const scheduleData = {
+
+  "7A": [
+
+    [
+      "Английский язык",
+      "Английский язык",
+      "Музыка",
+      "Биология",
+      "E_ZDROWOTNA",
+      "Польский язык",
+      "Doradztwo zawodowe"
+    ],
+
+    [
+      "Английский язык",
+      "Английский язык",
+      "Польский язык",
+      "Физика",
+      "Химия",
+      "Пластика",
+      "Физкультура",
+      "Физкультура"
+    ],
+
+    [
+      "Химия",
+      "Немецкий язык",
+      "Математика",
+      "История",
+      "Zajęcia z wychowawcą (училка)",
+      "Математика",
+      "Английский язык"
+    ],
+
+    [
+      "Английский язык",
+      "История",
+      "Польский язык",
+      "Польский язык",
+      "Математика",
+      "Математика",
+      "Физика"
+    ],
+
+    [
+      "Немецкий язык",
+      "Информатика",
+      "Биология",
+      "География",
+      "Польский язык",
+      "Математика",
+      "Физкультура",
+      "Физкультура"
+    ]
+
+  ]
+
+};
+
+let currentLanguage = "pl";
+let currentClass = "7A";
+
+const schedule = document.getElementById("schedule");
+const themeBtn = document.getElementById("themeBtn");
+
+const dayColors = [
+  "#6c5ce7",
+  "#00b894",
+  "#0984e3",
+  "#e17055",
+  "#fdcb6e"
+];
+
+function render() {
+
+  const t = translations[currentLanguage];
+
+  document.documentElement.lang = currentLanguage === "pl" ? "pl" : "uk";
+
+  document.getElementById("schoolSubtitle").textContent = t.subtitle;
+  document.getElementById("selectedText").textContent = t.selected;
+  document.getElementById("weekTitle").textContent = t.week;
+
+  document.getElementById("selectedClass").textContent = currentClass;
+
+  document.getElementById("weekSubtitle").textContent =
+    `${t.lessonsFor} ${currentClass}`;
+
+  document.querySelectorAll(".class-tab").forEach(button => {
+    button.classList.toggle(
+      "active",
+      button.dataset.class === currentClass
+    );
+  });
+
+  if (currentClass === "5B") {
+
+    schedule.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">📚</div>
+        <h2>${t.empty}</h2>
+        <p>5B</p>
+      </div>
+    `;
+
+    return;
+  }
+
+  schedule.innerHTML = "";
+
+  scheduleData["7A"].forEach((lessons, dayIndex) => {
+
+    const day = document.createElement("section");
+    day.className = "day";
+
+    day.style.setProperty(
+      "--day-color",
+      dayColors[dayIndex]
+    );
+
+    let lessonHTML = "";
+
+    lessons.forEach((subject, index) => {
+
+      let translatedSubject = subject;
+
+      if (currentLanguage === "ua") {
+        translatedSubject =
+          translations.ua.subjects[subject] || subject;
+      } else {
+        translatedSubject =
+          translations.pl.subjects[subject] || subject;
+      }
+
+      lessonHTML += `
+        <div class="lesson">
+          <div class="lesson-number">${index + 1}</div>
+          <div class="lesson-name">${translatedSubject}</div>
+        </div>
+      `;
+
+    });
+
+    day.innerHTML = `
+      <div class="day-header">
+        <div class="day-name">
+          <span class="day-dot"></span>
+          ${t.days[dayIndex]}
+        </div>
+
+        <div class="lesson-count">
+          ${lessons.length} ${t.lessons}
+        </div>
+      </div>
+
+      <div class="lessons">
+        ${lessonHTML}
+      </div>
+    `;
+
+    schedule.appendChild(day);
+
+  });
+
+}
+
+/* CLASS SWITCH */
+
+document.querySelectorAll(".class-tab").forEach(button => {
+
+  button.addEventListener("click", () => {
+
+    currentClass = button.dataset.class;
+
+    render();
+
+  });
+
+});
+
+/* LANGUAGE */
+
+document.getElementById("plBtn").addEventListener("click", () => {
+
+  currentLanguage = "pl";
+
+  document.getElementById("plBtn").classList.add("active");
+  document.getElementById("uaBtn").classList.remove("active");
+
+  render();
+
+});
+
+document.getElementById("uaBtn").addEventListener("click", () => {
+
+  currentLanguage = "ua";
+
+  document.getElementById("uaBtn").classList.add("active");
+  document.getElementById("plBtn").classList.remove("active");
+
+  render();
+
+});
+
+/* DARK MODE */
+
+themeBtn.addEventListener("click", () => {
+
+  document.body.classList.toggle("dark");
+
+  const dark = document.body.classList.contains("dark");
+
+  themeBtn.textContent = dark ? "☀️" : "🌙";
+
+  localStorage.setItem("sp2-theme", dark ? "dark" : "light");
+
+});
+
+/* LOAD THEME */
+
+if (localStorage.getItem("sp2-theme") === "dark") {
+
+  document.body.classList.add("dark");
+
+  themeBtn.textContent = "☀️";
+
+}
+
+/* INITIAL */
+
+render();
+
+</script>
+
+</body>
+</html>
